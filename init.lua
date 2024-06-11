@@ -228,6 +228,7 @@ require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically
   'zbirenbaum/copilot.lua',
+  'preservim/nerdtree',
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -303,6 +304,13 @@ require('lazy').setup({
   -- you do for a plugin at the top level, you can do for a dependency.
   --
   -- Use the `dependencies` key to specify the dependencies of a particular plugin
+  {
+    'preservim/nerdtree',
+    event = 'VimEnter',
+    config = function()
+      vim.keymap.set('n', '<leader>nt', '<cmd>NERDTreeToggle<CR>', { desc = '[N]ERD [T]ree' })
+    end,
+  },
 
   { -- Fuzzy Finder (files, lsp, etc)
     'nvim-telescope/telescope.nvim',
@@ -354,12 +362,14 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
-        -- pickers = {}
+        defaults = {
+          mappings = {
+            -- ctrl p to find files
+            i = {
+              ['<C-p>'] = require('telescope.builtin').find_files,
+            },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -932,7 +942,7 @@ require('copilot').setup {
     auto_trigger = true,
     debounce = 75,
     keymap = {
-      accept = '<Tab>',
+      accept = '<M-Tab>',
     },
   },
   filetypes = {
