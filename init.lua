@@ -960,4 +960,6 @@ require('copilot').setup {
   server_opts_overrides = {},
 }
 
+-- https://github.com/neovim/nvim-lspconfig
+-- npm i -g pyright
 require('lspconfig').pyright.setup {}
