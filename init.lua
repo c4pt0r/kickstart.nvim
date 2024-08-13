@@ -938,7 +938,7 @@ require('copilot').setup {
     auto_trigger = true,
     debounce = 75,
     keymap = {
-      accept = '<M-Tab>',
+      accept = '<Tab>',
     },
   },
   filetypes = {
