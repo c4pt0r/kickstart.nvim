@@ -743,7 +743,6 @@ require('lazy').setup({
           ['<CR>'] = cmp.mapping.confirm { select = true },
           ['<Tab>'] = cmp.mapping.select_next_item(),
           ['<S-Tab>'] = cmp.mapping.select_prev_item(),
-
           -- Manually trigger a completion from nvim-cmp.
           --  Generally you don't need this, because nvim-cmp will display
           --  completions whenever it has completion options available.
@@ -938,7 +937,7 @@ require('copilot').setup {
     auto_trigger = true,
     debounce = 75,
     keymap = {
-      accept = '<Tab>',
+      accept = '<C-CR>',
     },
   },
   filetypes = {
