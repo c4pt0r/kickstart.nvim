@@ -230,6 +230,7 @@ require('lazy').setup({
   'zbirenbaum/copilot.lua',
   'preservim/nerdtree',
   'zbirenbaum/copilot-cmp',
+  'liuchengxu/vista.vim',
 
 
   -- NOTE: Plugins can also be added by using a table,
@@ -933,11 +934,11 @@ require('lspconfig').rust_analyzer.setup {}
 
 require('copilot_cmp').setup {}
 
--- on window ready, show the NERDTree
+-- on window ready, show the NERDTree and Vista
 vim.api.nvim_exec2(
   [[
   autocmd VimEnter * NERDTree
-  autocmd VimEnter * wincmd p
+  autocmd VimEnter * Vista
 ]],
   {}
 )
