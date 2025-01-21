@@ -230,8 +230,16 @@ require('lazy').setup({
   'zbirenbaum/copilot.lua',
   'preservim/nerdtree',
   'zbirenbaum/copilot-cmp',
-  'liuchengxu/vista.vim',
 
+  {
+    'liuchenxu/vista.vim',
+    branch = 'master',
+    lazy = false,
+    config = function()
+      vim.g['vista#renderer#enable_icon'] = 0
+      vim.g['vista_icon_indent'] = { '╰─▸ ', '├─▸ ' }
+    end,
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
@@ -243,7 +251,7 @@ require('lazy').setup({
   --    require('Comment').setup({})
 
   -- "gc" to comment visual regions/lines
-  { 'numToStr/Comment.nvim',       opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
   { 'projekt0n/github-nvim-theme', name = 'github-theme' },
 
   -- Here is a more advanced example where we pass configuration
@@ -279,7 +287,7 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
-  {                     -- Useful plugin to show you pending keybinds.
+  { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     config = function() -- This is the function that runs, AFTER loading
@@ -338,7 +346,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -429,11 +437,11 @@ require('lazy').setup({
 
       -- Useful status updates for LSP.
       -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
-      { 'j-hui/fidget.nvim',       opts = {} },
+      { 'j-hui/fidget.nvim', opts = {} },
 
       -- `neodev` configures Lua LSP for your Neovim config, runtime and plugins
       -- used for completion, annotations and signatures of Neovim apis
-      { 'folke/neodev.nvim',       opts = {} },
+      { 'folke/neodev.nvim', opts = {} },
     },
     config = function()
       -- Brief aside: **What is LSP?**
