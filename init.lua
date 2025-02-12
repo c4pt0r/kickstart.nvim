@@ -232,7 +232,7 @@ require('lazy').setup({
   'zbirenbaum/copilot-cmp',
 
   {
-    'liuchenxu/vista.vim',
+    'liuchengxu/vista.vim',
     branch = 'master',
     lazy = false,
     config = function()
