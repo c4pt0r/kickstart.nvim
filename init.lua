@@ -190,6 +190,8 @@ vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right win
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 
+vim.keymap.set('v', '<C-l>', '<cmd>CopilotChatOpen<CR>', { desc = 'Open [C]opilot Chat' })
+
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 
@@ -294,19 +296,31 @@ require('lazy').setup({
       require('which-key').setup()
 
       -- Document existing key chains
-      require('which-key').register {
-        ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
-        ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
-        ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
-        ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
-        ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
-        ['<leader>t'] = { name = '[T]oggle', _ = 'which_key_ignore' },
-        ['<leader>h'] = { name = 'Git [H]unk', _ = 'which_key_ignore' },
+      require('which-key').add {
+        { '<leader>c', group = '[C]ode' },
+        { '<leader>d', group = '[D]ocument' },
+        { '<leader>h', group = 'Git [H]unk' },
+        { '<leader>r', group = '[R]ename' },
+        { '<leader>s', group = '[S]earch' },
+        { '<leader>t', group = '[T]oggle' },
+        { '<leader>w', group = '[W]orkspace' },
+        { '<leader>ms', group = '[M]ini [S]urround' },
+
+        { '<leader>msa', desc = 'Add surround: sa<motion><char>' },
+        { '<leader>msd', desc = 'Delete surround: sd<char>' },
+        { '<leader>msr', desc = 'Replace surround: sr<old><new>' },
+        { '<leader>msf', desc = 'Find right surround: sf<char>' },
+        { '<leader>msF', desc = 'Find left surround: sF<char>' },
+
+        { '<leader>msex', desc = 'Example: saiw" -> "word"' },
+        { '<leader>msed', desc = "Example: sd'  -> remove quotes" },
+        { '<leader>mser', desc = 'Example: sr\'" -> \'word\' -> "word"' },
+        { '<leader>mset', desc = 'Example: sat<p> -> <p>text</p>' },
       }
       -- visual mode
-      require('which-key').register({
-        ['<leader>h'] = { 'Git [H]unk' },
-      }, { mode = 'v' })
+      require('which-key').add {
+        { '<leader>h', desc = 'Git [H]unk', mode = 'v' },
+      }
     end,
   },
 
@@ -630,6 +644,9 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        ensure_installed = {},
+        automatic_installation = true,
+
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -783,8 +800,8 @@ require('lazy').setup({
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
         },
         sources = {
-          { name = 'copilot' },
           { name = 'nvim_lsp' },
+          { name = 'copilot' },
           { name = 'luasnip' },
           { name = 'path' },
         },
@@ -823,6 +840,12 @@ require('lazy').setup({
       --  - yinq - [Y]ank [I]nside [N]ext [']quote
       --  - ci'  - [C]hange [I]nside [']quote
       require('mini.ai').setup { n_lines = 500 }
+      require('mini.pairs').setup {
+        -- You can set the pairs you want to use here.
+        --  For example, you could add more pairs like:
+        --    pairs = { ['"'] = '"', ["'"] = "'", ['('] = ')', ['['] = ']', ['{'] = '}' }
+        pairs = { ['"'] = '"', ["'"] = "'", ['('] = ')', ['['] = ']', ['{'] = '}' },
+      }
 
       -- Add/delete/replace surroundings (brackets, quotes, etc.)
       --
@@ -939,6 +962,27 @@ require('copilot').setup {
 require('lspconfig').pyright.setup {}
 require('lspconfig').gopls.setup {}
 require('lspconfig').rust_analyzer.setup {}
+
+-- Clangd LSP
+local lspconfig = require 'lspconfig'
+local capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+lspconfig.clangd.setup {
+  cmd = { 'clangd', '--background-index', '--clang-tidy', '--completion-style=detailed' },
+  filetypes = { 'c', 'cpp', 'cc', 'h', 'hpp' },
+  root_dir = lspconfig.util.root_pattern('compile_commands.json', 'compile_flags.txt', '.clangd', '.git'),
+  capabilities = capabilities,
+
+  init_options = {
+    fallbackFlags = {
+      '-std=c99',
+      '-I' .. vim.fn.getcwd() .. '/include',
+      '-I/usr/local/include',
+      '-I/usr/include',
+    },
+  },
+}
+-- end of Clangd LSP
 
 require('copilot_cmp').setup {}
 
